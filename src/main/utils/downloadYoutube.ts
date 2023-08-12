@@ -10,6 +10,7 @@ import fs, { unlink } from "fs";
 import cp, { ChildProcessWithoutNullStreams } from "child_process";
 import { Readable, Writable } from "stream";
 import formatListsToShow from "./formatListsToShow";
+import queue from "./queue";
 
 const paths = {
   ffmpeg: ffmpegPath.path
@@ -28,29 +29,61 @@ const downloadYoutube = (
   customPath?: string
 ): Promise<string | unknown> => {
   // eslint-disable-next-line no-async-promise-executor
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolveCb, reject) => {
     event.sender.send("ffmpegPath", paths.ffmpeg);
 
+    event.sender.send("video-details", { id: url, title: "title", thumbnail: "thumbnail" });
+
+    queue.push(() => {
+      return new Promise((resolve, reject) => {
+        let percent = 0;
+        const time = setInterval(() => {
+          percent += Math.floor(Math.random() * 10);
+          event.sender.send("download-progress", {
+            id: url,
+            percent: percent >= 100 ? 100 : percent
+          });
+
+          if (percent >= 100) {
+            clearInterval(time);
+            resolveCb("done");
+            resolve("done");
+          }
+        }, 500);
+      });
+    });
+
+    /* let percent = 0;
+    const time = setInterval(() => {
+      percent += Math.floor(Math.random() * 10);
+      event.sender.send("download-progress", { id: url, percent: percent >= 100 ? 100 : percent });
+
+      if (percent >= 100) {
+        clearInterval(time);
+        resolveCb("done");
+      }
+    }, 500); */
+
     // eslint-disable-next-line prefer-const, @typescript-eslint/no-unused-vars
-    let totalTime = 0;
+    //let totalTime = 0;
 
     //const infos = await ytdl.getInfo(url);
-    const infos = await getListOfVideoInfos(url);
+    //const infos = await getListOfVideoInfos(url);
 
-    const { videoDetails } = infos.allInfos;
+    //const { videoDetails } = infos.allInfos;
 
-    console.log("list of formats: ", infos.listOfVideoInfos);
+    //console.log("list of formats: ", infos.listOfVideoInfos);
 
-    const { title, thumbnails, publishDate, category, lengthSeconds } = videoDetails;
-    const thumbnail = thumbnails?.at(-1)?.url;
+    //const { title, thumbnails, publishDate, category, lengthSeconds } = videoDetails;
+    //const thumbnail = thumbnails?.at(-1)?.url;
 
-    event.sender.send("video-details", { title, thumbnail, publishDate, category, lengthSeconds });
+    //event.sender.send("video-details", { title, thumbnail, publishDate, category, lengthSeconds });
 
-    const name = title.replace(/[^a-z0-9]/gi, "_").toLowerCase() + new Date().getTime();
+    //const name = title.replace(/[^a-z0-9]/gi, "_").toLowerCase() + new Date().getTime();
 
-    const defaultPath = customPath ? customPath : app.getPath("music");
+    // const defaultPath = customPath ? customPath : app.getPath("music");
 
-    const format = ytdl.chooseFormat(infos.allInfos.formats, { quality: "250" });
+    //const format = ytdl.chooseFormat(infos.allInfos.formats, { quality: "250" });
 
     // downloadYoutubeVideo(url, `${defaultPath}/${name}`);
     //downloadYoutubeVideoFFMPEG(url, `${defaultPath}/${name}`, 136);

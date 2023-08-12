@@ -1,36 +1,47 @@
-/* eslint-disable react/prop-types */
 import { IFormatInfo, VideoInfo } from "@pages/home";
 import * as S from "./styles";
 import { useEffect, useState } from "react";
+import DownloadIcon from "@components/DownloadIcon";
 
-interface OptionModalProps {
+type OptionModalProps = {
   visible?: boolean;
-  close?: () => void;
+  close: () => void;
   data?: VideoInfo;
+};
+
+enum FileType {
+  audio = "audio",
+  video = "video",
+  videoOutAudio = "videoOutAudio"
 }
 
 const OptionModal: React.FC<OptionModalProps> = ({ visible, close, data }) => {
-  const [currentType, setCurrentType] = useState<"audio" | "video">("audio");
+  const [currentType, setCurrentType] = useState<FileType>(FileType.audio);
   const [currentFormat, setCurrentFormat] = useState<"mp4" | "mp3">("mp3");
   const [currentListOfFiles, setCurrentListOfFiles] = useState<IFormatInfo[] | []>([]);
+  const [fileSelected, setFileSelected] = useState<IFormatInfo | null>(null);
+  const [checkedValue, setCheckedValue] = useState<string>("");
 
   const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
-    const value = e.target.value as "audio" | "video";
+    const value = e.target.value as FileType;
     setCurrentType(value);
 
-    if (value === "audio") {
+    if (value === FileType.audio) {
       setCurrentFormat("mp3");
-      setCurrentListOfFiles(data ? data.listOfAudioInfos : []);
       return;
     }
 
     setCurrentFormat("mp4");
-    setCurrentListOfFiles(data ? data.listOfVideoInfos : []);
+  };
+
+  const handleCheckedValue = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setCheckedValue(e.target.value);
   };
 
   useEffect(() => {
     if (data) {
-      if (currentType === "audio") {
+      setCheckedValue("");
+      if (currentType === FileType.audio) {
         setCurrentListOfFiles(data.listOfAudioInfos);
         return;
       }
@@ -38,6 +49,23 @@ const OptionModal: React.FC<OptionModalProps> = ({ visible, close, data }) => {
       setCurrentListOfFiles(data.listOfVideoInfos);
     }
   }, [currentType, data]);
+
+  const handleOnClickDownload = (): void => {
+    if (currentFormat === "mp3") {
+      if (data) {
+        const dataAudio = {
+          videoInfos: data.formats,
+          quality: checkedValue,
+          duration: data.duration,
+          thumbnail: data.thumbnail,
+          title: data.title
+        };
+        window.api.youtube.downloadAudio(dataAudio);
+      }
+    }
+
+    close();
+  };
 
   return (
     <>
@@ -69,6 +97,7 @@ const OptionModal: React.FC<OptionModalProps> = ({ visible, close, data }) => {
                 <S.ChooseType value={currentType} onChange={handleTypeChange}>
                   <option value="audio">Audio</option>
                   <option value="video">Vídeo</option>
+                  <option value="videoOutAudio">Vídeo Sem Audio</option>
                 </S.ChooseType>
               </S.TypeSelector>
 
@@ -89,32 +118,30 @@ const OptionModal: React.FC<OptionModalProps> = ({ visible, close, data }) => {
               </S.ListToDownloadHeader>
 
               <S.ListToDownloadBody>
-                {/* <S.ListToDownloadItem>
-                  <S.ListToDownloadGeneric>
-                    <S.ListToDownloadItemInput className="radio">
-                      <input name="download" type="radio" checked />
-                      <span></span>
-                    </S.ListToDownloadItemInput>
-                    <p>1080p</p>
-                  </S.ListToDownloadGeneric>
-                  <S.ListToDownloadItemText>audio/webm</S.ListToDownloadItemText>
-                  <S.ListToDownloadItemText>3.45MB</S.ListToDownloadItemText>
-                </S.ListToDownloadItem> */}
-
-                {currentListOfFiles.map((item, index) => {
-                  const { VideoQuality, mimeType, audioBitrate, itag, totalSizeMB } = item;
+                {currentListOfFiles.map((item: IFormatInfo) => {
+                  const { VideoQuality, mimeType, audioBitrate, itag, totalSizeMB, sizeMB } = item;
 
                   return (
                     <S.ListToDownloadItem key={itag}>
                       <S.ListToDownloadGeneric>
                         <S.ListToDownloadItemInput className="radio">
-                          <input name="download" type="radio" value={itag} />
+                          <input
+                            name="download"
+                            type="radio"
+                            value={itag}
+                            checked={checkedValue == `${itag}`}
+                            onChange={handleCheckedValue}
+                          />
                           <span></span>
                         </S.ListToDownloadItemInput>
-                        <p>{currentType == "audio" ? audioBitrate : VideoQuality}</p>
+                        <p>{currentType == FileType.audio ? audioBitrate : VideoQuality}</p>
                       </S.ListToDownloadGeneric>
-                      <S.ListToDownloadItemText>{mimeType}</S.ListToDownloadItemText>
-                      <S.ListToDownloadItemText>{totalSizeMB}</S.ListToDownloadItemText>
+                      <S.ListToDownloadItemText className="codec">
+                        {mimeType}
+                      </S.ListToDownloadItemText>
+                      <S.ListToDownloadItemText>
+                        {currentType == FileType.videoOutAudio ? sizeMB : totalSizeMB}
+                      </S.ListToDownloadItemText>
                     </S.ListToDownloadItem>
                   );
                 })}
@@ -122,6 +149,14 @@ const OptionModal: React.FC<OptionModalProps> = ({ visible, close, data }) => {
                 {currentListOfFiles.length === 0 && <p>nenhum arquivo encontrado</p>}
               </S.ListToDownloadBody>
             </S.ListToDownloadContainer>
+
+            <S.DownloadContainer>
+              {checkedValue && (
+                <S.DownloadButton disabled={!checkedValue} onClick={handleOnClickDownload}>
+                  Baixar <DownloadIcon />
+                </S.DownloadButton>
+              )}
+            </S.DownloadContainer>
           </S.Container>
         </>
       )}

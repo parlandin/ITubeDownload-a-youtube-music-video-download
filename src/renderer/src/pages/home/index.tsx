@@ -3,6 +3,8 @@ import Header from "@components/Header";
 import * as S from "./styles";
 import { useState } from "react";
 import OptionModal from "@components/OptionModal";
+import SpinnerIcon from "@components/SpinnerIcon";
+import DownloadsContainer from "@components/DownloadsContainer";
 
 export interface IFormatInfo {
   quality: string;
@@ -24,12 +26,13 @@ export interface VideoInfo {
   thumbnail: string;
   listOfVideoInfos: IFormatInfo[];
   listOfAudioInfos: IFormatInfo[];
-  formats: unknown[];
+  formats: unknown;
 }
 
 const Home: React.FC = () => {
   const [url, setUrl] = useState<string>("");
   const [erro, setErro] = useState<string>("");
+  const [isPending, setIsPending] = useState<boolean>(false);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [videoInfo, setVideoInfo] = useState<VideoInfo>();
 
@@ -42,10 +45,16 @@ const Home: React.FC = () => {
       return;
     }
 
+    setIsPending(true);
+    getListOfVideosInfos(url);
+  };
+
+  const getListOfVideosInfos = async (url: string): Promise<void> => {
     const listOfVideos = (await window.api.youtube.getListOfVideosInfos(url)) as VideoInfo;
-    console.log(listOfVideos);
-    setIsOpenModal(true);
+
     setVideoInfo(listOfVideos);
+    setIsOpenModal(true);
+    setIsPending(false);
   };
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -62,6 +71,8 @@ const Home: React.FC = () => {
       <OptionModal visible={isOpenModal} close={closeModal} data={videoInfo} />
       <Header />
       {/* <DownloadComponent /> */}
+
+      {/*todo: This should be changed to a component */}
       <S.Description>
         Baixe vídeos e músicas do <span>Youtube</span> e <span>Youtube Music</span> de forma simples
         e rápida.
@@ -74,8 +85,17 @@ const Home: React.FC = () => {
           onChange={handleOnChange}
         />
         <S.Button onClick={handleDownload}>Buscar</S.Button>
+
+        {erro && <S.Error>Error: {erro}</S.Error>}
+        {isPending && (
+          <S.PendingMessage>
+            Coletando informações do vídeo <SpinnerIcon />
+          </S.PendingMessage>
+        )}
       </S.InputBox>
-      {erro && <S.Error>Error: {erro}</S.Error>}
+
+      {/* todo: fim  */}
+      <DownloadsContainer />
     </S.Container>
   );
 };

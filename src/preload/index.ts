@@ -11,6 +11,14 @@ interface videoInfos {
   lengthSeconds: string;
 }
 
+interface AudioDownload {
+  videoInfos: unknown;
+  quality: string;
+  duration: string;
+  thumbnail: string;
+  title: string;
+}
+
 export interface APIInterface {
   youtube: {
     sendUrlToDownloading: (url: string, folderSelected?: string) => void;
@@ -22,6 +30,7 @@ export interface APIInterface {
     getSelectedFolder: () => Promise<string>;
     validateUrl: (url: string) => Promise<boolean>;
     getListOfVideosInfos: (url: string) => Promise<IFormattedReturn>;
+    downloadAudio: (data: AudioDownload) => void;
   };
   window: {
     minimize: () => void;
@@ -39,8 +48,14 @@ const api = {
       return ipcRenderer.invoke("getListOfVideos", url);
     },
 
-    sendUrlToDownloading: (url: string, folderSelected?: string): void =>
-      ipcRenderer.send("download-url", { url, folderSelected }),
+    downloadAudio: (data: AudioDownload): void => {
+      ipcRenderer.send("download-audio", data);
+    },
+
+    sendUrlToDownloading: (url: string, folderSelected?: string): void => {
+      return ipcRenderer.send("download-url", { url, folderSelected });
+    },
+
     getPercent: (callback: (percent: number) => void): void => {
       ipcRenderer.on("download-progress", (_event, percent) => {
         callback(percent);

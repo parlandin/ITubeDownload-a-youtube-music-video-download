@@ -12,6 +12,7 @@ const Description = styled.p`
   margin: 0 auto;
   margin-top: 100px;
   max-width: 499px;
+  line-height: 22px;
 
   & span {
     color: #fb3030f2;
@@ -22,9 +23,10 @@ const Description = styled.p`
 
 const InputBox = styled.div`
   width: 100%;
-  margin: 25px auto 20px;
+  margin: 25px auto 35px;
   display: flex;
   justify-content: center;
+  position: relative;
 `;
 
 const Input = styled.input`
@@ -66,9 +68,25 @@ const Button = styled.button`
 
 const Error = styled.p`
   display: block;
-  margin: 0 auto;
+  //margin: 0 auto;
   text-align: center;
   color: #ff0000;
+  position: absolute;
+  top: 51px;
 `;
 
-export { Container, Description, Input, InputBox, Button, Error };
+const PendingMessage = styled.p`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #d1d1d1;
+  position: absolute;
+  top: 50px;
+
+  & i {
+    margin-left: 5px;
+    color: #ff0000;
+  }
+`;
+
+export { Container, Description, Input, InputBox, Button, Error, PendingMessage };

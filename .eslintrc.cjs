@@ -32,6 +32,7 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": "error",
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-var-requires": "off",
+    "react/prop-types": "off",
     "prettier/prettier": "error",
     "arrow-body-style": "off",
     "prefer-arrow-callback": "off"

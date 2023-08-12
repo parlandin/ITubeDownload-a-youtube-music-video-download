@@ -15,7 +15,7 @@ const Container = styled.div`
   position: absolute;
   background-color: #121212;
   width: 85%;
-  height: 80%;
+  height: 84%;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -186,6 +186,10 @@ const ListToDownloadItemText = styled.p`
   text-align: center;
   color: #fff;
 
+  &.codec {
+    word-break: break-all;
+  }
+
   &:last-of-type {
     text-align: right;
     margin-right: 5px;
@@ -250,6 +254,36 @@ const ListToDownloadItemInput = styled.label`
   }
 `;
 
+const DownloadContainer = styled.div`
+  width: 90%;
+  margin: 13px auto;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const DownloadButton = styled.button`
+  border: 1px solid #feffff1a;
+  border-left: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #ff0000;
+  font-weight: 600;
+  font-size: 1rem;
+  background-color: #fff;
+  padding: 4px 10px;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease-in-out;
+
+  & i {
+    margin-left: 5px;
+  }
+
+  &:hover {
+    opacity: 0.7;
+  }
+`;
+
 export {
   Container,
   BackgroundOverlay,
@@ -272,5 +306,7 @@ export {
   ListToDownloadItem,
   ListToDownloadItemInput,
   ListToDownloadGeneric,
-  ListToDownloadItemText
+  ListToDownloadItemText,
+  DownloadContainer,
+  DownloadButton
 };

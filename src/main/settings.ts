@@ -16,7 +16,8 @@ export const setStore = (key: string, value: unknown): void => {
 const setDefaultSettings = (): void => {
   if (getStore("settings") === undefined) {
     setStore("settings", {
-      selectedFolder: app.getPath("music")
+      selectedFolder: app.getPath("music"),
+      maxDownloadsConcurrency: 1
     });
   }
 };
