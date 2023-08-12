@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import * as S from "./styles";
 import ProgressBar from "@components/ProgressBar";
 
-type SimulateArray = {
+/* type SimulateArray = {
   progress: number;
   id: string;
-};
+}; */
 
 interface DataList {
   id: string;
@@ -18,17 +18,17 @@ interface DataList {
 
 const DownloadsContainer: React.FC = () => {
   //const simulateArray: SimulateArray[] = [];
-  const [simulateArray, setSimulateArray] = useState<SimulateArray[]>([]);
+  //const [simulateArray, setSimulateArray] = useState<SimulateArray[]>([]);
   const [dataList, setDataList] = useState<DataList[]>([]);
 
-  function uniqueID(): string {
+  /*  function uniqueID(): string {
     return `${Math.floor(Math.random() * Math.floor(Math.random() * Date.now()))}`;
-  }
+  } */
 
-  const handleDownload = (): void => {
+  /*  const handleDownload = (): void => {
     const id = uniqueID();
     window.api.youtube.sendUrlToDownloading(`${id}`);
-  };
+  }; */
 
   const setPercentOnDownload = (id: string, percent: number): void => {
     setDataList((prev) => {
@@ -59,25 +59,9 @@ const DownloadsContainer: React.FC = () => {
   return (
     <S.Container isContent={dataList.length > 0}>
       {/*  <button onClick={handleDownload}>simular</button> */}
-      {/*  <S.VideoContainer>
-        <S.VideoThumbnail>
-          <img
-            src="https://i.ytimg.com/vi/j_KAOHosW3Y/hqdefault.jpg?sqp=-oaymwE1CKgBEF5IVfKriqkDKAgBFQAAiEIYAXABwAEG8AEB-AH8CYAC0AWKAgwIABABGCsgYShyMA8=&rs=AOn4CLB2qwHJInTSiaxEBZKqclSfadol4A"
-            alt=""
-          />
-        </S.VideoThumbnail>
-
-        <S.VideoDetails>
-          <S.VideoText className="title">Running away to your own world ° a playlist</S.VideoText>
-          <S.VideoText className="text">duração: {"4:13"} minutos</S.VideoText>
-          <S.VideoText className="text download">
-            <span>download:</span> <ProgressBar bgcolor="red" completed={10} />
-          </S.VideoText>
-        </S.VideoDetails>
-      </S.VideoContainer> */}
 
       {dataList.map((item) => {
-        const isCompleted = item.progress === 100;
+        const isCompleted = item.progress == 100;
 
         return (
           <S.VideoContainer key={item.id}>
@@ -89,7 +73,7 @@ const DownloadsContainer: React.FC = () => {
               <S.VideoText className="title">{item.title}</S.VideoText>
               <S.VideoText className="text">duração: {item.duration} minutos</S.VideoText>
               <S.VideoText className="text download">
-                <span>download{isCompleted ? ":" : ""}</span>
+                <span>download{isCompleted ? "" : ":"}</span>
                 {!isCompleted ? (
                   <ProgressBar bgcolor="red" completed={item.progress} />
                 ) : (

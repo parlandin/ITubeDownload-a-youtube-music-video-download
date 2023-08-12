@@ -1,7 +1,7 @@
 import ytdl, { videoInfo } from "ytdl-core";
 import ffmpeg from "./ffmpeg";
 import queue from "./queue";
-import { getStore } from "../settings";
+import { getStore, getSelectedFolder } from "../settings";
 
 const downloadAudio = (
   event: Electron.IpcMainEvent,
@@ -11,8 +11,9 @@ const downloadAudio = (
   thumbnail: string,
   title: string
 ): void => {
-  const defaultPath = (getStore("settings") as { selectedFolder: string | undefined })
-    .selectedFolder;
+  const defaultPath = getSelectedFolder();
+
+  console.log("defaultPath", defaultPath);
 
   const qualityInt = parseInt(quality);
 
@@ -38,7 +39,7 @@ const downloadAudio = (
 
       let totalTime = 0;
       const ffmpegProcess = ffmpeg(stream)
-        .audioBitrate(chooseFormat.audioBitrate || 128)
+        .audioBitrate(chooseFormat.audioBitrate || 160)
         .save(`${defaultPath}/${name}.mp3`)
         .on("codecData", (data) => {
           totalTime = parseInt(data.duration.replace(/:/g, ""));

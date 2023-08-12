@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import ytdl from "ytdl-core";
-import { app } from "electron";
+//import { app } from "electron";
 import ffmpegPath from "@ffmpeg-installer/ffmpeg";
 import ffmpeg from "fluent-ffmpeg";
 import electronIsDev from "electron-is-dev";
-import { mainWindow } from "..";
-import getListOfVideoInfos, { FormatType } from "./getListOfVideoInfos";
-import fs, { unlink } from "fs";
-import cp, { ChildProcessWithoutNullStreams } from "child_process";
-import { Readable, Writable } from "stream";
-import formatListsToShow from "./formatListsToShow";
+//import { mainWindow } from "..";
+//import getListOfVideoInfos, { FormatType } from "./getListOfVideoInfos";
+//import fs, { unlink } from "fs";
+//import cp, { ChildProcessWithoutNullStreams } from "child_process";
+import cp from "child_process";
+//import { Readable, Writable } from "stream";
+//import formatListsToShow from "./formatListsToShow";
 import queue from "./queue";
 
 const paths = {
@@ -23,19 +24,15 @@ if (!electronIsDev) {
 
 ffmpeg.setFfmpegPath(paths.ffmpeg);
 
-const downloadYoutube = (
-  url: string,
-  event: Electron.IpcMainEvent,
-  customPath?: string
-): Promise<string | unknown> => {
+const downloadYoutube = (url: string, event: Electron.IpcMainEvent): Promise<string | unknown> => {
   // eslint-disable-next-line no-async-promise-executor
-  return new Promise(async (resolveCb, reject) => {
+  return new Promise(async (resolveCb) => {
     event.sender.send("ffmpegPath", paths.ffmpeg);
 
     event.sender.send("video-details", { id: url, title: "title", thumbnail: "thumbnail" });
 
     queue.push(() => {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         let percent = 0;
         const time = setInterval(() => {
           percent += Math.floor(Math.random() * 10);
@@ -43,6 +40,7 @@ const downloadYoutube = (
             id: url,
             percent: percent >= 100 ? 100 : percent
           });
+          downloadYoutubeVideoFFMPEG(url, "event", 255);
 
           if (percent >= 100) {
             clearInterval(time);
@@ -149,7 +147,8 @@ const downloadYoutubeVideoFFMPEG = (url: string, path: string, itag: number): vo
   });
 
   // Prepare the progress bar
-  const args = {};
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  //const args = {};
   let progressbarHandle: null | NodeJS.Timer = null;
   const progressbarInterval = 1000;
   const showProgress = (): void => {

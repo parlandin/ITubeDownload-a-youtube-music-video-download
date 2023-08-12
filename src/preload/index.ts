@@ -26,8 +26,6 @@ export interface APIInterface {
     getVideoInfos: (callback: (Infos: videoInfos) => void) => void;
     downloadError: (callback: (error: unknown) => void) => void;
     getFfmpegPath: (callback: (ffmpegPath: string) => void) => void;
-    selectFolder: () => Promise<string>;
-    getSelectedFolder: () => Promise<string>;
     validateUrl: (url: string) => Promise<boolean>;
     getListOfVideosInfos: (url: string) => Promise<IFormattedReturn>;
     downloadAudio: (data: AudioDownload) => void;
@@ -35,6 +33,12 @@ export interface APIInterface {
   window: {
     minimize: () => void;
     close: () => void;
+  };
+  settings: {
+    getMaxDownloadsConcurrency: () => Promise<number>;
+    setMaxDownloadsConcurrency: (maxDownloadsConcurrency: number) => void;
+    selectFolder: () => Promise<string>;
+    getSelectedFolder: () => Promise<string>;
   };
 }
 
@@ -75,6 +79,18 @@ const api = {
       ipcRenderer.on("ffmpegPath", (_event, ffmpegPath) => {
         callback(ffmpegPath);
       });
+    }
+  },
+  window: {
+    minimize: (): void => ipcRenderer.send("minimize"),
+    close: (): void => ipcRenderer.send("close")
+  },
+  settings: {
+    getMaxDownloadsConcurrency: (): Promise<number> => {
+      return ipcRenderer.invoke("getConcurrencyDownloads");
+    },
+    setMaxDownloadsConcurrency: (maxDownloadsConcurrency: number): void => {
+      ipcRenderer.invoke("setConcurrencyDownloads", maxDownloadsConcurrency);
     },
     selectFolder: async (): Promise<string> => {
       return new Promise((resolve) => {
@@ -89,10 +105,6 @@ const api = {
     getSelectedFolder: async (): Promise<string> => {
       return ipcRenderer.invoke("getSelectedFolder");
     }
-  },
-  window: {
-    minimize: (): void => ipcRenderer.send("minimize"),
-    close: (): void => ipcRenderer.send("close")
   }
 };
 

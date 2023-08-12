@@ -1,6 +1,5 @@
 import * as S from "./styles";
 import { NavLink } from "react-router-dom";
-import Settings from "@components/SettingsIcon";
 
 const Header = (): JSX.Element => {
   return (

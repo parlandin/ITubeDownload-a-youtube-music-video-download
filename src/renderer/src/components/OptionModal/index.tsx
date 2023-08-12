@@ -19,7 +19,6 @@ const OptionModal: React.FC<OptionModalProps> = ({ visible, close, data }) => {
   const [currentType, setCurrentType] = useState<FileType>(FileType.audio);
   const [currentFormat, setCurrentFormat] = useState<"mp4" | "mp3">("mp3");
   const [currentListOfFiles, setCurrentListOfFiles] = useState<IFormatInfo[] | []>([]);
-  const [fileSelected, setFileSelected] = useState<IFormatInfo | null>(null);
   const [checkedValue, setCheckedValue] = useState<string>("");
 
   const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
@@ -134,7 +133,9 @@ const OptionModal: React.FC<OptionModalProps> = ({ visible, close, data }) => {
                           />
                           <span></span>
                         </S.ListToDownloadItemInput>
-                        <p>{currentType == FileType.audio ? audioBitrate : VideoQuality}</p>
+                        <p>
+                          {currentType == FileType.audio ? `${audioBitrate}kbps` : VideoQuality}
+                        </p>
                       </S.ListToDownloadGeneric>
                       <S.ListToDownloadItemText className="codec">
                         {mimeType}

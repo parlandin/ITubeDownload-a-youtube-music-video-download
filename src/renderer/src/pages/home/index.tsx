@@ -1,4 +1,3 @@
-import DownloadComponent from "@components/Download";
 import Header from "@components/Header";
 import * as S from "./styles";
 import { useState } from "react";
