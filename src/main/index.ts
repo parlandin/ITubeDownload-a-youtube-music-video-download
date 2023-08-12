@@ -7,6 +7,7 @@ import "./MainProcess/downloadYoutube";
 import "./MainProcess/selectedFolder";
 import "./MainProcess/windowAction";
 import "./MainProcess/getListToShow";
+import "./MainProcess/ConcurrencyDownloads";
 
 let mainWindow: BrowserWindow | null = null;
 

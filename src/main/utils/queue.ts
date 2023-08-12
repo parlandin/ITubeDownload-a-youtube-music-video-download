@@ -1,11 +1,14 @@
 import Queue from "queue";
-import { getStore } from "../settings";
+import { getMaxDownloadsConcurrency, OnChangeMaxDownloadsConcurrency } from "../settings";
 
 const queue = new Queue({
-  concurrency: (getStore("settings") as { maxDownloadsConcurrency: number })
-    .maxDownloadsConcurrency,
+  concurrency: getMaxDownloadsConcurrency() || 1,
   autostart: true,
   results: []
+});
+
+OnChangeMaxDownloadsConcurrency((maxDownloadsConcurrency) => {
+  queue.concurrency = maxDownloadsConcurrency;
 });
 
 export default queue;

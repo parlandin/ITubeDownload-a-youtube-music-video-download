@@ -1,3 +1,4 @@
+import Slider from "react-rangeslider";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -60,4 +61,55 @@ const InputButton = styled.button`
   }
 `;
 
-export { Container, Title, InputContainer, InputLabel, InputBox, InputText, InputButton };
+//slider component
+const SliderStyle = styled(Slider)`
+  margin-right: 15px;
+  background: #464646;
+  height: 9px;
+  cursor: pointer;
+
+  & .rangeslider__handle-label {
+    display: none;
+  }
+
+  & .rangeslider__label-item {
+    color: #fff;
+    max-width: 50px;
+    text-align: center;
+    line-height: 18px;
+
+    &:last-of-type {
+      max-width: 30px;
+    }
+  }
+
+  & .rangeslider__fill {
+    background-color: #ff2300;
+  }
+
+  & .rangeslider__handle {
+    background: #202020;
+    border: 1px solid #1a1a1a;
+    width: 20px;
+    height: 20px;
+
+    &::after {
+      width: 10px;
+      height: 10px;
+      top: 4px;
+      left: 4px;
+      background-color: #585858;
+    }
+  }
+`;
+
+export {
+  Container,
+  Title,
+  InputContainer,
+  InputLabel,
+  InputBox,
+  InputText,
+  InputButton,
+  SliderStyle
+};
