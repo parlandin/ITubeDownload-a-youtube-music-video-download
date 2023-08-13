@@ -1,6 +1,6 @@
 {
-  "name": "my-app",
-  "version": "1.0.0",
+  "name": "ITube-Download",
+  "version": "1.0.01",
   "description": "An Electron application with React and TypeScript",
   "main": "./out/main/index.js",
   "author": "example.com",

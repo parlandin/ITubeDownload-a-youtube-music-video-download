@@ -1,5 +1,6 @@
 appId: com.electron.app
-productName: my-app
+productName: ITube-Download
+
 directories:
   buildResources: build
 files:
@@ -13,7 +14,7 @@ asarUnpack:
   - resources/**
 afterSign: build/notarize.js
 win:
-  executableName: my-app
+  executableName: ITube-Download
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
