@@ -19,16 +19,22 @@ interface AudioDownload {
   title: string;
 }
 
+interface VideoDownload extends AudioDownload {
+  audioQuality: string;
+}
+
 export interface APIInterface {
   youtube: {
     sendUrlToDownloading: (url: string, folderSelected?: string) => void;
-    getPercent: (callback: (percent: number) => void) => void;
+    getPercent: (callback: (data: { id: string; percent: number }) => void) => void;
     getVideoInfos: (callback: (Infos: videoInfos) => void) => void;
     downloadError: (callback: (error: unknown) => void) => void;
     getFfmpegPath: (callback: (ffmpegPath: string) => void) => void;
     validateUrl: (url: string) => Promise<boolean>;
     getListOfVideosInfos: (url: string) => Promise<IFormattedReturn>;
     downloadAudio: (data: AudioDownload) => void;
+    downloadVideo: (data: AudioDownload) => void;
+    getFilePath: (filePath: string) => Promise<void>;
   };
   window: {
     minimize: () => void;
@@ -39,6 +45,7 @@ export interface APIInterface {
     setMaxDownloadsConcurrency: (maxDownloadsConcurrency: number) => void;
     selectFolder: () => Promise<string>;
     getSelectedFolder: () => Promise<string>;
+    getAppVersion: () => Promise<string>;
   };
 }
 
@@ -56,11 +63,15 @@ const api = {
       ipcRenderer.send("download-audio", data);
     },
 
+    downloadVideo: (data: VideoDownload): void => {
+      ipcRenderer.send("download-video", data);
+    },
+
     sendUrlToDownloading: (url: string, folderSelected?: string): void => {
       return ipcRenderer.send("download-url", { url, folderSelected });
     },
 
-    getPercent: (callback: (percent: number) => void): void => {
+    getPercent: (callback: (data: { id: string; percent: number }) => void): void => {
       ipcRenderer.on("download-progress", (_event, percent) => {
         callback(percent);
       });
@@ -69,6 +80,10 @@ const api = {
       ipcRenderer.on("video-details", (_event, infos) => {
         callback(infos);
       });
+    },
+
+    getFilePath: async (filePath: string): Promise<void> => {
+      return ipcRenderer.invoke("getFilePath", filePath);
     },
     downloadError: (callback: (error: unknown) => void): void => {
       ipcRenderer.on("download-error", (_event, error) => {
@@ -104,6 +119,10 @@ const api = {
 
     getSelectedFolder: async (): Promise<string> => {
       return ipcRenderer.invoke("getSelectedFolder");
+    },
+
+    getAppVersion: async (): Promise<string> => {
+      return ipcRenderer.invoke("getAppVersion");
     }
   }
 };

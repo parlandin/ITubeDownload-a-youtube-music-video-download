@@ -50,17 +50,38 @@ const OptionModal: React.FC<OptionModalProps> = ({ visible, close, data }) => {
   }, [currentType, data]);
 
   const handleOnClickDownload = (): void => {
-    if (currentFormat === "mp3") {
-      if (data) {
-        const dataAudio = {
-          videoInfos: data.formats,
-          quality: checkedValue,
-          duration: data.duration,
-          thumbnail: data.thumbnail,
-          title: data.title
-        };
-        window.api.youtube.downloadAudio(dataAudio);
-      }
+    if (!data) return;
+
+    const dataAudio = {
+      videoInfos: data.formats,
+      quality: checkedValue,
+      duration: data.duration,
+      thumbnail: data.thumbnail,
+      title: data.title
+    };
+
+    if (currentType === FileType.audio) {
+      window.api.youtube.downloadAudio(dataAudio);
+    }
+
+    if (currentType === FileType.video) {
+      let audioQuality: string | undefined = undefined;
+      currentListOfFiles.forEach((item: IFormatInfo) => {
+        if (item.itag === parseInt(checkedValue)) {
+          audioQuality = item.audioQuality;
+        }
+      });
+
+      const dataVideo = {
+        ...dataAudio,
+        audioQuality: audioQuality
+      };
+
+      window.api.youtube.downloadVideo(dataVideo);
+    }
+
+    if (currentType === FileType.videoOutAudio) {
+      alert("Essa opção ainda não está disponível");
     }
 
     close();

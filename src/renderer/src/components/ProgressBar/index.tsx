@@ -14,8 +14,8 @@ const ContainerStyles = styled.div`
 
 const FillerStyles = styled.div<IFillerStyles>`
   height: 100%;
-  //@ts-ignore
   width: ${({ completed }): number => (completed ? completed : 0)}%;
+  transition: width 0.2s ease-in-out;
   background-color: ${({ bgcolor }): string => bgcolor || "#1DA598"};
   border-radius: inherit;
   text-align: center;

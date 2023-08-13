@@ -8,6 +8,7 @@ const Container = styled.div<{ isContent: boolean }>`
   overflow-y: auto;
   margin: 0 auto;
   max-height: 314px;
+  height: ${({ isContent }): string => (isContent ? "314px" : "0")};
   border-radius: 6px;
   padding: ${({ isContent }): string => (isContent ? "10px" : "0")};
   flex-direction: column;
@@ -48,7 +49,13 @@ const VideoText = styled.h1`
   color: #fff;
 
   &.title {
+    display: block;
     font-size: 1rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    overflow: hidden;
+    max-width: 600px;
   }
 
   &.text {
@@ -76,4 +83,55 @@ const VideoText = styled.h1`
   }
 `;
 
-export { Container, VideoContainer, VideoThumbnail, VideoDetails, VideoText };
+const FilePath = styled.div`
+  width: 100%;
+  height: 23px;
+  background-color: #2d2a27;
+  color: #d0cfd3;
+  border-radius: 6px;
+  margin-left: 10px;
+  padding: 7px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-size: 0.8rem;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const FlipContainer = styled.div`
+  width: 100%;
+  perspective: 1000px;
+
+  & div.flipper {
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+    position: relative;
+
+    ${VideoContainer}:hover & {
+      transform: rotateX(180deg);
+    }
+  }
+
+  & div.card {
+    backface-visibility: hidden;
+    position: absolute;
+    width: 100%;
+
+    &.back {
+      transform: rotateX(180deg);
+      bottom: 1px;
+    }
+  }
+`;
+
+export {
+  Container,
+  VideoContainer,
+  VideoThumbnail,
+  VideoDetails,
+  VideoText,
+  FilePath,
+  FlipContainer
+};

@@ -3,6 +3,7 @@ import Router from "./routers";
 import TitleBar from "@components/TitleBar";
 import GlobalStyles from "@renderer/styles/index";
 import MainContainer from "@components/MainContainer";
+import DownloadProvider from "@renderer/context/downloadContext";
 
 function App(): JSX.Element {
   return (
@@ -10,7 +11,10 @@ function App(): JSX.Element {
       <GlobalStyles />
       <MainContainer>
         <TitleBar />
-        <Router />
+
+        <DownloadProvider>
+          <Router />
+        </DownloadProvider>
       </MainContainer>
     </>
   );

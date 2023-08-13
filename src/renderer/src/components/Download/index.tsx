@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import * as S from "./styles";
-import ProgressBar from "../ProgressBar";
+//import ProgressBar from "../ProgressBar";
 
 interface videoInfos {
   title: string;
@@ -10,9 +10,11 @@ interface videoInfos {
   lengthSeconds: string;
 }
 
+//this a temporary component
+
 const DownloadComponent = (): JSX.Element => {
-  const [urlInput, setUrlInput] = useState<string>("");
-  const [downloadPercent, setDownloadPercent] = useState<number>(0);
+  //const [urlInput, setUrlInput] = useState<string>("");
+  //const [downloadPercent, setDownloadPercent] = useState<number>(0);
   const [videoTInfos, setVideoInfos] = useState<videoInfos>({
     title: "",
     thumbnail: "",
@@ -20,26 +22,26 @@ const DownloadComponent = (): JSX.Element => {
     category: "",
     lengthSeconds: ""
   });
-  const [selectedFolder, setSelectedFolder] = useState<string>("");
+  //const [selectedFolder, setSelectedFolder] = useState<string>("");
 
-  const handleUrlInput = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setUrlInput(event.target.value);
+  const handleUrlInput = (): void => {
+    //setUrlInput(event.target.value);
   };
 
   const handleDownload = async (): Promise<void> => {
-    window.api.youtube.sendUrlToDownloading(urlInput, selectedFolder);
+    //window.api.youtube.sendUrlToDownloading(urlInput, selectedFolder);
   };
 
   const getSelectedFolder = async (): Promise<void> => {
-    const selectedFolder = await window.api.youtube.getSelectedFolder();
-    setSelectedFolder(selectedFolder);
+    //const selectedFolder = await window.api.youtube.getSelectedFolder();
+    //setSelectedFolder(selectedFolder);
   };
 
   useEffect(() => {
     if (window) {
-      window.api.youtube.getPercent((percent: number) => {
+      /*  window.api.youtube.getPercent((percent: number) => {
         setDownloadPercent(parseFloat(percent.toFixed(2)));
-      });
+      }); */
 
       window.api.youtube.getVideoInfos(
         ({ category, lengthSeconds, publishDate, thumbnail, title }) => {
@@ -94,11 +96,11 @@ const DownloadComponent = (): JSX.Element => {
             </S.Infos>
           </S.Card>
         )}
-        {downloadPercent > 0 && (
+        {/*  {downloadPercent > 0 && (
           <div>
             <ProgressBar bgcolor={"#2e0846"} completed={downloadPercent} />
           </div>
-        )}
+        )} */}
       </div>
     </S.Container>
   );

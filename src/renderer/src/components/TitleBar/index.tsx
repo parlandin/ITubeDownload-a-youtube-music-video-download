@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import * as S from "./styles";
 
 const TitleBar: React.FC = () => {
+  const [appVersion, setAppVersion] = useState<string>("");
+
+  const handleGetAppVersion = async (): Promise<void> => {
+    const version = await window.api.settings.getAppVersion();
+    setAppVersion(version);
+  };
+
   const handleMinimize = (): void => {
     window.api.window.minimize();
   };
@@ -10,9 +17,13 @@ const TitleBar: React.FC = () => {
     window.api.window.close();
   };
 
+  useEffect(() => {
+    handleGetAppVersion();
+  }, []);
+
   return (
     <S.Container>
-      <S.Title>v 1.0.0</S.Title>
+      <S.Title>v {appVersion}</S.Title>
       <S.ActionMenu>
         <S.Button title="minimize" onClick={handleMinimize}>
           &minus;
