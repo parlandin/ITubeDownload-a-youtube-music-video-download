@@ -4,6 +4,7 @@ import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
 import setDefaultSettings from "./settings";
 import isDev from "electron-is-dev";
+import log from "electron-log";
 
 import "./MainProcess/downloadYoutube";
 import "./MainProcess/selectedFolder";
@@ -53,6 +54,19 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, "../renderer/index.html"));
   }
+
+  //open deep link
+  if (process.platform !== "darwin") {
+    const deeplinkingUrl = process.argv.find((arg) => arg.startsWith("itube-download-link://"));
+
+    if (deeplinkingUrl) {
+      const link = deeplinkingUrl.split("itube-download-link://")[1];
+
+      mainWindow.addListener("show", () => {
+        mainWindow?.webContents.send("deep-download-link", link);
+      });
+    }
+  }
 }
 
 // This method will be called when Electron has finished
@@ -73,6 +87,7 @@ app.whenReady().then(() => {
 
   app.on("activate", function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    //open dev tools
   });
 });
 
@@ -89,12 +104,14 @@ ipcMain.handle("getAppVersion", () => {
   return app.getVersion();
 });
 
+ipcMain.on("logWarning", (_event, data) => {
+  log.warn(data);
+});
+
 //deep linking
 
 if (isDev && process.platform === "win32") {
-  // Set the path of electron.exe and your app.
-  // These two additional parameters are only available on windows.
-  // Setting this is required to get this working in dev mode.
+  // windows dev mode
   app.setAsDefaultProtocolClient("itube-download-link", process.execPath, [
     resolve(process.argv[1])
   ]);
@@ -122,6 +139,7 @@ if (!gotTheLock) {
 
       if (deeplinkingUrl) {
         const link = deeplinkingUrl.split("itube-download-link://")[1];
+
         mainWindow?.webContents.send("deep-download-link", link);
       }
     }

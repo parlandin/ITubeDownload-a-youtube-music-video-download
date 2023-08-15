@@ -48,6 +48,9 @@ export interface APIInterface {
     getSelectedFolder: () => Promise<string>;
     getAppVersion: () => Promise<string>;
   };
+  general: {
+    logWarning: (message: string) => void;
+  };
 }
 
 const api = {
@@ -129,6 +132,11 @@ const api = {
 
     getAppVersion: async (): Promise<string> => {
       return ipcRenderer.invoke("getAppVersion");
+    }
+  },
+  general: {
+    logWarning: (message: string): void => {
+      ipcRenderer.send("logWarning", message);
     }
   }
 };
