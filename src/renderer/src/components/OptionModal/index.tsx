@@ -37,6 +37,17 @@ const OptionModal: React.FC<OptionModalProps> = ({ visible, close, data }) => {
     setCheckedValue(e.target.value);
   };
 
+  const formatCodecs = (input: string): string[] | [] => {
+    const regex = /\/(\w+);\scodecs="([^"]+)"/;
+
+    const match = input.match(regex);
+    if (match) {
+      return [match[1], match[2]];
+    }
+
+    return [];
+  };
+
   useEffect(() => {
     if (data) {
       setCheckedValue("");
@@ -140,6 +151,7 @@ const OptionModal: React.FC<OptionModalProps> = ({ visible, close, data }) => {
               <S.ListToDownloadBody>
                 {currentListOfFiles.map((item: IFormatInfo) => {
                   const { VideoQuality, mimeType, audioBitrate, itag, totalSizeMB, sizeMB } = item;
+                  const codecs = formatCodecs(mimeType as string);
 
                   return (
                     <S.ListToDownloadItem key={itag}>
@@ -154,12 +166,13 @@ const OptionModal: React.FC<OptionModalProps> = ({ visible, close, data }) => {
                           />
                           <span></span>
                         </S.ListToDownloadItemInput>
-                        <p>
+                        <p className="quality">
                           {currentType == FileType.audio ? `${audioBitrate}kbps` : VideoQuality}
                         </p>
                       </S.ListToDownloadGeneric>
                       <S.ListToDownloadItemText className="codec">
-                        {mimeType}
+                        {/*  {mimeType} */}
+                        {codecs.length > 0 && ` ${codecs[0]} • ${codecs[1]}`}
                       </S.ListToDownloadItemText>
                       <S.ListToDownloadItemText>
                         {currentType == FileType.videoOutAudio ? sizeMB : totalSizeMB}

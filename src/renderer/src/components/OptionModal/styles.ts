@@ -149,7 +149,7 @@ const ListToDownloadHeader = styled.div`
 
 const ListToDownloadTitle = styled.p`
   color: #fff;
-  font-size: 0.9rem;
+  font-size: 1rem;
   text-align: center;
   max-width: 33%;
   width: 33%;
@@ -185,6 +185,7 @@ const ListToDownloadItemText = styled.p`
   max-width: 33%;
   text-align: center;
   color: #fff;
+  color: #c5c5c5;
 
   &.codec {
     word-break: break-all;
@@ -204,6 +205,7 @@ const ListToDownloadGeneric = styled.div`
 
   & p {
     color: #fff;
+    color: #c5c5c5;
   }
 `;
 
@@ -226,18 +228,18 @@ const ListToDownloadItemInput = styled.label`
         top: 0px;
         left: 0px;
         border-radius: 50%;
-        //margin-right: 5px;
         width: 16px;
         height: 16px;
-        border: 1px solid #ccc;
-        background: #fff;
+        //border: 1px solid #fff;
+        border: 1px solid #d52f2f;
+        background: #484848;
       }
       &:after {
         content: "";
         display: block;
         width: 14px;
         height: 14px;
-        background: #222;
+        background: #f00;
         position: absolute;
         border-radius: 50%;
         top: 2px;
