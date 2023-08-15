@@ -1,8 +1,10 @@
 import { app, shell, BrowserWindow, ipcMain } from "electron";
-import { join } from "path";
+import { join, resolve } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
 import setDefaultSettings from "./settings";
+import isDev from "electron-is-dev";
+
 import "./MainProcess/downloadYoutube";
 import "./MainProcess/selectedFolder";
 import "./MainProcess/windowAction";
@@ -86,5 +88,49 @@ app.on("window-all-closed", () => {
 ipcMain.handle("getAppVersion", () => {
   return app.getVersion();
 });
+
+//deep linking
+
+if (isDev && process.platform === "win32") {
+  // Set the path of electron.exe and your app.
+  // These two additional parameters are only available on windows.
+  // Setting this is required to get this working in dev mode.
+  app.setAsDefaultProtocolClient("itube-download-link", process.execPath, [
+    resolve(process.argv[1])
+  ]);
+} else {
+  app.setAsDefaultProtocolClient("itube-download-link");
+}
+
+app.on("open-url", function (event, url) {
+  event.preventDefault();
+  const deeplinkingUrl = url;
+  console.log({ macDeepLink: deeplinkingUrl });
+
+  //mac deep link has not implemented yet
+});
+
+// Force single application instance
+const gotTheLock = app.requestSingleInstanceLock();
+
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on("second-instance", (_e, argv) => {
+    if (process.platform !== "darwin") {
+      const deeplinkingUrl = argv.find((arg) => arg.startsWith("itube-download-link://"));
+
+      if (deeplinkingUrl) {
+        const link = deeplinkingUrl.split("itube-download-link://")[1];
+        mainWindow?.webContents.send("deep-download-link", link);
+      }
+    }
+
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      mainWindow.focus();
+    }
+  });
+}
 
 export { mainWindow };

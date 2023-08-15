@@ -35,6 +35,7 @@ export interface APIInterface {
     downloadAudio: (data: AudioDownload) => void;
     downloadVideo: (data: AudioDownload) => void;
     getFilePath: (filePath: string) => Promise<void>;
+    onDeepLink: (callback: (url: string) => void) => void;
   };
   window: {
     minimize: () => void;
@@ -93,6 +94,11 @@ const api = {
     getFfmpegPath: (callback: (ffmpegPath: string) => void): void => {
       ipcRenderer.on("ffmpegPath", (_event, ffmpegPath) => {
         callback(ffmpegPath);
+      });
+    },
+    onDeepLink: (callback: (url: string) => void): void => {
+      ipcRenderer.on("deep-download-link", (_event, url) => {
+        callback(url);
       });
     }
   },

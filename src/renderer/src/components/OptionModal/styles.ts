@@ -286,6 +286,22 @@ const DownloadButton = styled.button`
   }
 `;
 
+const PendingMessage = styled.p`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #d1d1d1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  & i {
+    margin-left: 5px;
+    color: #ff0000;
+  }
+`;
+
 export {
   Container,
   BackgroundOverlay,
@@ -310,5 +326,6 @@ export {
   ListToDownloadGeneric,
   ListToDownloadItemText,
   DownloadContainer,
-  DownloadButton
+  DownloadButton,
+  PendingMessage
 };

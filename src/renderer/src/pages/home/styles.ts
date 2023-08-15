@@ -75,18 +75,4 @@ const Error = styled.p`
   top: 51px;
 `;
 
-const PendingMessage = styled.p`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #d1d1d1;
-  position: absolute;
-  top: 50px;
-
-  & i {
-    margin-left: 5px;
-    color: #ff0000;
-  }
-`;
-
-export { Container, Description, Input, InputBox, Button, Error, PendingMessage };
+export { Container, Description, Input, InputBox, Button, Error };

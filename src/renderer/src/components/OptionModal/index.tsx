@@ -2,11 +2,13 @@ import { IFormatInfo, VideoInfo } from "@pages/home";
 import * as S from "./styles";
 import { useEffect, useState } from "react";
 import DownloadIcon from "@components/DownloadIcon";
+import SpinnerIcon from "@components/SpinnerIcon";
 
 type OptionModalProps = {
   visible?: boolean;
   close: () => void;
   data?: VideoInfo;
+  isPending?: boolean;
 };
 
 enum FileType {
@@ -15,7 +17,7 @@ enum FileType {
   videoOutAudio = "videoOutAudio"
 }
 
-const OptionModal: React.FC<OptionModalProps> = ({ visible, close, data }) => {
+const OptionModal: React.FC<OptionModalProps> = ({ visible, close, data, isPending }) => {
   const [currentType, setCurrentType] = useState<FileType>(FileType.audio);
   const [currentFormat, setCurrentFormat] = useState<"mp4" | "mp3">("mp3");
   const [currentListOfFiles, setCurrentListOfFiles] = useState<IFormatInfo[] | []>([]);
@@ -111,87 +113,96 @@ const OptionModal: React.FC<OptionModalProps> = ({ visible, close, data }) => {
               </S.CloseButton>
             </S.Header>
 
-            <S.VideoContainer>
-              <S.VideoThumbnail>
-                <img src={data?.thumbnail} alt="" />
-              </S.VideoThumbnail>
+            {isPending ? (
+              <S.PendingMessage>
+                Coletando informações do vídeo <SpinnerIcon />
+              </S.PendingMessage>
+            ) : (
+              <>
+                <S.VideoContainer>
+                  <S.VideoThumbnail>
+                    <img src={data?.thumbnail} alt="" />
+                  </S.VideoThumbnail>
 
-              <S.VideoDetails>
-                <S.VideoTitle>{data?.title}</S.VideoTitle>
-                <S.VideoDuration>{data?.duration} minutos</S.VideoDuration>
-              </S.VideoDetails>
-            </S.VideoContainer>
+                  <S.VideoDetails>
+                    <S.VideoTitle>{data?.title}</S.VideoTitle>
+                    <S.VideoDuration>{data?.duration} minutos</S.VideoDuration>
+                  </S.VideoDetails>
+                </S.VideoContainer>
 
-            <S.TypeSelectorContainer>
-              <S.TypeSelector>
-                <S.TypeSelectorLabel>Tipo</S.TypeSelectorLabel>
-                <S.ChooseType value={currentType} onChange={handleTypeChange}>
-                  <option value="audio">Audio</option>
-                  <option value="video">Vídeo</option>
-                  <option value="videoOutAudio">Vídeo Sem Audio</option>
-                </S.ChooseType>
-              </S.TypeSelector>
+                <S.TypeSelectorContainer>
+                  <S.TypeSelector>
+                    <S.TypeSelectorLabel>Tipo</S.TypeSelectorLabel>
+                    <S.ChooseType value={currentType} onChange={handleTypeChange}>
+                      <option value="audio">Audio</option>
+                      <option value="video">Vídeo</option>
+                      <option value="videoOutAudio">Vídeo Sem Audio</option>
+                    </S.ChooseType>
+                  </S.TypeSelector>
 
-              <S.TypeSelector>
-                <S.TypeSelectorLabel>Formato</S.TypeSelectorLabel>
-                <S.ChooseType disabled value={currentFormat}>
-                  <option value="mp3">mp3</option>
-                  <option value="mp4">mp4</option>
-                </S.ChooseType>
-              </S.TypeSelector>
-            </S.TypeSelectorContainer>
+                  <S.TypeSelector>
+                    <S.TypeSelectorLabel>Formato</S.TypeSelectorLabel>
+                    <S.ChooseType disabled value={currentFormat}>
+                      <option value="mp3">mp3</option>
+                      <option value="mp4">mp4</option>
+                    </S.ChooseType>
+                  </S.TypeSelector>
+                </S.TypeSelectorContainer>
 
-            <S.ListToDownloadContainer>
-              <S.ListToDownloadHeader>
-                <S.ListToDownloadTitle>Qualidade</S.ListToDownloadTitle>
-                <S.ListToDownloadTitle>Codecs de {currentType}</S.ListToDownloadTitle>
-                <S.ListToDownloadTitle>Tamanho aproximado</S.ListToDownloadTitle>
-              </S.ListToDownloadHeader>
+                <S.ListToDownloadContainer>
+                  <S.ListToDownloadHeader>
+                    <S.ListToDownloadTitle>Qualidade</S.ListToDownloadTitle>
+                    <S.ListToDownloadTitle>Codecs de {currentType}</S.ListToDownloadTitle>
+                    <S.ListToDownloadTitle>Tamanho aproximado</S.ListToDownloadTitle>
+                  </S.ListToDownloadHeader>
 
-              <S.ListToDownloadBody>
-                {currentListOfFiles.map((item: IFormatInfo) => {
-                  const { VideoQuality, mimeType, audioBitrate, itag, totalSizeMB, sizeMB } = item;
-                  const codecs = formatCodecs(mimeType as string);
+                  <S.ListToDownloadBody>
+                    {currentListOfFiles.map((item: IFormatInfo) => {
+                      const { VideoQuality, mimeType, audioBitrate, itag, totalSizeMB, sizeMB } =
+                        item;
+                      const codecs = formatCodecs(mimeType as string);
 
-                  return (
-                    <S.ListToDownloadItem key={itag}>
-                      <S.ListToDownloadGeneric>
-                        <S.ListToDownloadItemInput className="radio">
-                          <input
-                            name="download"
-                            type="radio"
-                            value={itag}
-                            checked={checkedValue == `${itag}`}
-                            onChange={handleCheckedValue}
-                          />
-                          <span></span>
-                        </S.ListToDownloadItemInput>
-                        <p className="quality">
-                          {currentType == FileType.audio ? `${audioBitrate}kbps` : VideoQuality}
-                        </p>
-                      </S.ListToDownloadGeneric>
-                      <S.ListToDownloadItemText className="codec">
-                        {/*  {mimeType} */}
-                        {codecs.length > 0 && ` ${codecs[0]} • ${codecs[1]}`}
-                      </S.ListToDownloadItemText>
-                      <S.ListToDownloadItemText>
-                        {currentType == FileType.videoOutAudio ? sizeMB : totalSizeMB}
-                      </S.ListToDownloadItemText>
-                    </S.ListToDownloadItem>
-                  );
-                })}
+                      return (
+                        <S.ListToDownloadItem key={itag}>
+                          <S.ListToDownloadGeneric>
+                            <S.ListToDownloadItemInput className="radio">
+                              <input
+                                name="download"
+                                type="radio"
+                                value={itag}
+                                checked={checkedValue == `${itag}`}
+                                onChange={handleCheckedValue}
+                              />
+                              <span></span>
+                            </S.ListToDownloadItemInput>
+                            <p className="quality">
+                              {currentType == FileType.audio ? `${audioBitrate}kbps` : VideoQuality}
+                            </p>
+                          </S.ListToDownloadGeneric>
+                          <S.ListToDownloadItemText className="codec">
+                            {/*  {mimeType} */}
+                            {codecs.length > 0 && ` ${codecs[0]} • ${codecs[1]}`}
+                          </S.ListToDownloadItemText>
+                          <S.ListToDownloadItemText>
+                            {currentType == FileType.videoOutAudio ? sizeMB : totalSizeMB}
+                          </S.ListToDownloadItemText>
+                        </S.ListToDownloadItem>
+                      );
+                    })}
 
-                {currentListOfFiles.length === 0 && <p>nenhum arquivo encontrado</p>}
-              </S.ListToDownloadBody>
-            </S.ListToDownloadContainer>
+                    {currentListOfFiles.length === 0 && <p>nenhum arquivo encontrado</p>}
+                  </S.ListToDownloadBody>
+                </S.ListToDownloadContainer>
 
-            <S.DownloadContainer>
-              {checkedValue && (
-                <S.DownloadButton disabled={!checkedValue} onClick={handleOnClickDownload}>
-                  Baixar <DownloadIcon />
-                </S.DownloadButton>
-              )}
-            </S.DownloadContainer>
+                <S.DownloadContainer>
+                  {checkedValue && (
+                    <S.DownloadButton disabled={!checkedValue} onClick={handleOnClickDownload}>
+                      Baixar <DownloadIcon />
+                    </S.DownloadButton>
+                  )}
+                </S.DownloadContainer>
+              </>
+            )}
           </S.Container>
         </>
       )}

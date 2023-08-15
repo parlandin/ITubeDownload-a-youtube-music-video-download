@@ -1,8 +1,7 @@
 import Header from "@components/Header";
 import * as S from "./styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import OptionModal from "@components/OptionModal";
-import SpinnerIcon from "@components/SpinnerIcon";
 import DownloadsContainer from "@components/DownloadsContainer";
 
 export interface IFormatInfo {
@@ -44,7 +43,8 @@ const Home: React.FC = () => {
       return;
     }
 
-    setIsPending(true);
+    setIsPending(() => true);
+    setIsOpenModal(() => true);
     getListOfVideosInfos(url);
   };
 
@@ -52,8 +52,7 @@ const Home: React.FC = () => {
     const listOfVideos = (await window.api.youtube.getListOfVideosInfos(url)) as VideoInfo;
 
     setVideoInfo(listOfVideos);
-    setIsOpenModal(true);
-    setIsPending(false);
+    setIsPending(() => false);
   };
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -65,9 +64,23 @@ const Home: React.FC = () => {
     setUrl("");
   };
 
+  useEffect(() => {
+    if (window) {
+      window.api.youtube.onDeepLink((url: string) => {
+        setIsPending(true);
+        getListOfVideosInfos(url);
+      });
+    }
+  }, []);
+
   return (
     <S.Container>
-      <OptionModal visible={isOpenModal} close={closeModal} data={videoInfo} />
+      <OptionModal
+        visible={isOpenModal}
+        close={closeModal}
+        data={videoInfo}
+        isPending={isPending}
+      />
       <Header />
       {/* <DownloadComponent /> */}
 
@@ -86,11 +99,6 @@ const Home: React.FC = () => {
         <S.Button onClick={handleDownload}>Buscar</S.Button>
 
         {erro && <S.Error>Error: {erro}</S.Error>}
-        {isPending && (
-          <S.PendingMessage>
-            Coletando informações do vídeo <SpinnerIcon />
-          </S.PendingMessage>
-        )}
       </S.InputBox>
 
       {/* todo: fim  */}
