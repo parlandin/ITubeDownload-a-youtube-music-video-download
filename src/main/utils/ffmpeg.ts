@@ -1,5 +1,4 @@
 import fmpegPath from "@ffmpeg-installer/ffmpeg";
-import ffmpeg from "fluent-ffmpeg";
 import electronIsDev from "electron-is-dev";
 
 const paths = {
@@ -11,8 +10,8 @@ if (!electronIsDev) {
   paths.ffmpeg = fixPath(paths.ffmpeg);
 }
 
-ffmpeg.setFfmpegPath(paths.ffmpeg);
+//ffmpeg.setFfmpegPath(paths.ffmpeg);
 
 export const ffmpegPath = paths.ffmpeg;
 
-export default ffmpeg;
+//export default ffmpeg;
