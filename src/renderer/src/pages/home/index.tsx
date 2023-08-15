@@ -43,6 +43,10 @@ const Home: React.FC = () => {
       return;
     }
 
+    openModalToRequestDownload(url);
+  };
+
+  const openModalToRequestDownload = (url: string): void => {
     setIsPending(() => true);
     setIsOpenModal(() => true);
     getListOfVideosInfos(url);
@@ -66,10 +70,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     if (window) {
-      window.api.youtube.onDeepLink((url: string) => {
-        setIsPending(true);
-        getListOfVideosInfos(url);
-      });
+      window.api.youtube.onDeepLink(openModalToRequestDownload);
     }
   }, []);
 
