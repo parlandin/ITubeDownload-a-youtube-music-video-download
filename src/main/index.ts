@@ -1,10 +1,11 @@
-import { app, shell, BrowserWindow, ipcMain } from "electron";
-import { join, resolve } from "path";
+import { app, shell, BrowserWindow, ipcMain, dialog, MessageBoxOptions } from "electron";
+import path, { join, resolve } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
 import setDefaultSettings from "./settings";
 import isDev from "electron-is-dev";
 import log from "electron-log";
+import { autoUpdater } from "electron-updater";
 
 import "./MainProcess/downloadYoutube";
 import "./MainProcess/selectedFolder";
@@ -88,6 +89,44 @@ app.whenReady().then(() => {
   app.on("activate", function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
     //open dev tools
+  });
+
+  // auto update
+  autoUpdater.allowPrerelease = true;
+  if (isDev) {
+    autoUpdater.updateConfigPath = path.join(__dirname, "..", "..", "dev-app-update.yml");
+    autoUpdater.forceDevUpdateConfig = true;
+    autoUpdater.autoDownload = false;
+  }
+
+  autoUpdater.checkForUpdates();
+});
+
+// update
+
+autoUpdater.on("update-available", ({ releaseName }) => {
+  const dialogOpts: MessageBoxOptions = {
+    type: "info",
+    buttons: ["Ok"],
+    title: `Atualização disponível`,
+    message: `realease: ${releaseName}\nVeja a lista de mudanças em:`,
+    detail: `Uma nova versão começou a ser baixada. Você será notificado quando a atualização estiver pronta.`
+  };
+
+  dialog.showMessageBox(dialogOpts);
+});
+
+autoUpdater.on("update-downloaded", ({ releaseName }) => {
+  const dialogOpts: MessageBoxOptions = {
+    type: "info",
+    buttons: ["Reiniciar", "Mais tarde"],
+    title: "Application Update",
+    message: `realease: ${releaseName}`,
+    detail: "Uma nova versão foi baixada. Reinicie o aplicativo para aplicar a atualização. "
+  };
+
+  dialog.showMessageBox(dialogOpts).then((returnValue) => {
+    if (returnValue.response === 0) autoUpdater.quitAndInstall();
   });
 });
 

@@ -40,8 +40,9 @@ appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
 publish:
-  provider: generic
-  url: https://example.com/auto-updates
+  provider: github
+  owner: Gu-Parlandim
+  repo: ITubeDownload-a-youtube-music-video-download
 protocols:
   name: ITube-Download
   schemes:

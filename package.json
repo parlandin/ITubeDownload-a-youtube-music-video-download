@@ -1,10 +1,11 @@
 {
   "name": "ITube-Download",
-  "version": "1.0.01",
+  "version": "1.0.2",
   "description": "An Electron application with React and TypeScript",
   "main": "./out/main/index.js",
-  "author": "example.com",
-  "homepage": "https://www.electronjs.org",
+  "author": "Parlandim",
+  "homepage": "https://github.com/Gu-Parlandim/ITubeDownload-a-youtube-music-video-download",
+  "repository": "https://github.com/Gu-Parlandim/ITubeDownload-a-youtube-music-video-download",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",

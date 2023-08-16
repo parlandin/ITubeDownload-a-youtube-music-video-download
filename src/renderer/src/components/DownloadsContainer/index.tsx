@@ -53,7 +53,10 @@ const DownloadsContainer: React.FC = () => {
               <S.VideoText className="title" title={item.title}>
                 {item.title}
               </S.VideoText>
-              <S.VideoText className="text">duração: {item.duration} minutos</S.VideoText>
+
+              <S.VideoText className="text duration">
+                0{item.duration} • 5,10MB • mp4 • 1080p • Red Hot Chili Peppers
+              </S.VideoText>
 
               <S.FlipContainer>
                 <div className="flipper">

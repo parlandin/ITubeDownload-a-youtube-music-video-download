@@ -48,6 +48,10 @@ const VideoText = styled.h1`
   margin: 10px;
   color: #fff;
 
+  &.text.duration {
+    color: #c5c5c5;
+  }
+
   &.title {
     display: block;
     font-size: 1rem;
