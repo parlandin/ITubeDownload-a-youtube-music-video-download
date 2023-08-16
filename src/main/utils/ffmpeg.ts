@@ -1,11 +1,11 @@
 import fmpegPath from "@ffmpeg-installer/ffmpeg";
-import electronIsDev from "electron-is-dev";
+import { is } from "@electron-toolkit/utils";
 
 const paths = {
   ffmpeg: fmpegPath.path
 };
 
-if (!electronIsDev) {
+if (!is.dev) {
   const fixPath = (path: string): string => path.replace("app.asar", "app.asar.unpacked");
   paths.ffmpeg = fixPath(paths.ffmpeg);
 }

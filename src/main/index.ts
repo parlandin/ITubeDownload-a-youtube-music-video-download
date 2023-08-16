@@ -3,7 +3,6 @@ import path, { join, resolve } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
 import setDefaultSettings from "./settings";
-import isDev from "electron-is-dev";
 import log from "electron-log";
 import { autoUpdater } from "electron-updater";
 
@@ -93,7 +92,7 @@ app.whenReady().then(() => {
 
   // auto update
   autoUpdater.allowPrerelease = true;
-  if (isDev) {
+  if (is.dev) {
     autoUpdater.updateConfigPath = path.join(__dirname, "..", "..", "dev-app-update.yml");
     autoUpdater.forceDevUpdateConfig = true;
     autoUpdater.autoDownload = false;
@@ -149,7 +148,7 @@ ipcMain.on("logWarning", (_event, data) => {
 
 //deep linking
 
-if (isDev && process.platform === "win32") {
+if (is.dev && process.platform === "win32") {
   // windows dev mode
   app.setAsDefaultProtocolClient("itube-download-link", process.execPath, [
     resolve(process.argv[1])
