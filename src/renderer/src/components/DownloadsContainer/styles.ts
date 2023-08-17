@@ -30,11 +30,27 @@ const VideoThumbnail = styled.div`
   height: 80px;
   min-width: 100px;
   margin-right: 5px;
+  position: relative;
 
   & img {
     width: 100%;
     height: 100%;
     border-radius: 6px;
+  }
+`;
+
+const VideoThumbnailFormatIcon = styled.div`
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 18px;
+  height: 18px;
+  background-color: #b32121b8;
+  border-radius: 3px;
+
+  & img {
+    width: 100%;
+    height: 100%;
   }
 `;
 
@@ -143,7 +159,7 @@ const ContentsInfos = styled.div`
 const Separator = styled.div`
   width: 4px;
   height: 4px;
-  background-color: #ff0000;
+  background-color: #cb2d2de6;
   border-radius: 50%;
 
   margin: 0 5px;
@@ -153,6 +169,7 @@ export {
   Container,
   VideoContainer,
   VideoThumbnail,
+  VideoThumbnailFormatIcon,
   VideoDetails,
   VideoText,
   FilePath,

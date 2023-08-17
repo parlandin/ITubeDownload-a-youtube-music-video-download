@@ -1,6 +1,8 @@
 import * as S from "./styles";
 import ProgressBar from "@components/ProgressBar";
 import useDownloads from "@renderer/hooks/useDownloads";
+import VideoIcon from "@assets/video.png";
+import AudioIcon from "@assets/audio.svg";
 
 const DownloadsContainer: React.FC = () => {
   const { dataList, dataListComplete } = useDownloads();
@@ -20,6 +22,10 @@ const DownloadsContainer: React.FC = () => {
           <S.VideoContainer key={item.id}>
             <S.VideoThumbnail>
               <img src={item.thumbnail} alt="" />
+
+              <S.VideoThumbnailFormatIcon>
+                <img src={item.format == "mp3" ? AudioIcon : VideoIcon} alt="" />
+              </S.VideoThumbnailFormatIcon>
             </S.VideoThumbnail>
 
             <S.VideoDetails>
@@ -54,6 +60,10 @@ const DownloadsContainer: React.FC = () => {
           <S.VideoContainer key={item.id}>
             <S.VideoThumbnail>
               <img src={item.thumbnail} alt="" />
+
+              <S.VideoThumbnailFormatIcon>
+                <img src={item.format == "mp3" ? AudioIcon : VideoIcon} alt="" />
+              </S.VideoThumbnailFormatIcon>
             </S.VideoThumbnail>
 
             <S.VideoDetails>
