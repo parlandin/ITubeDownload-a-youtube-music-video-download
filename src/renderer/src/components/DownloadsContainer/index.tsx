@@ -12,7 +12,7 @@ const DownloadsContainer: React.FC = () => {
   };
 
   return (
-    <S.Container isContent={dataList.length >= 0 || dataListComplete.length >= 0}>
+    <S.Container isContent={dataList.length > 0 || dataListComplete.length > 0}>
       {dataList.map((item) => {
         const isCompleted = item.progress == 100;
 

@@ -6,13 +6,16 @@ const Container = styled.div`
 
 const Description = styled.p`
   font-size: 1rem;
-  font-weight: 500;
+  //font-weight: 500;
+  font-weight: 800;
   color: #fff;
   text-align: center;
   margin: 0 auto;
   margin-top: 100px;
-  max-width: 499px;
-  line-height: 22px;
+  //max-width: 499px;
+  //line-height: 22px;
+  max-width: 506px;
+  line-height: 23px;
 
   & span {
     color: #fb3030f2;
@@ -23,7 +26,7 @@ const Description = styled.p`
 
 const InputBox = styled.div`
   width: 100%;
-  margin: 25px auto 35px;
+  margin: 28px auto 35px;
   display: flex;
   justify-content: center;
   position: relative;
