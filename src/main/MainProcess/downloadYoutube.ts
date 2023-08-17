@@ -10,13 +10,13 @@ ipcMain.handle("validateUrl", (_event, data) => {
 });
 
 ipcMain.on("download-audio", async (event, data) => {
-  const { videoInfos, quality, duration, thumbnail, title } = data;
-  downloadAudio(event, videoInfos, quality, duration, thumbnail, title);
+  const { videoInfos, quality, duration, thumbnail, title, totalSize } = data;
+  downloadAudio(event, videoInfos, quality, duration, thumbnail, title, totalSize);
 });
 
 ipcMain.on("download-video", async (event, data) => {
-  const { videoInfos, quality, duration, thumbnail, title, audioQuality } = data;
-  downloadVideo(event, videoInfos, quality, duration, thumbnail, title, audioQuality);
+  const { videoInfos, quality, duration, thumbnail, title, audioQuality, totalSize } = data;
+  downloadVideo(event, videoInfos, quality, duration, thumbnail, title, audioQuality, totalSize);
 });
 
 ipcMain.handle("getFilePath", async (_event, filePath) => {

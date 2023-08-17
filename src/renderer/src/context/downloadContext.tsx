@@ -16,6 +16,10 @@ export interface DataList {
   duration: string;
   progress: number;
   filePath: string;
+  format: string;
+  quality: string;
+  totalSize: string;
+  channel: string;
 }
 
 export const DownloadContext = createContext<ContextType | null>(null);

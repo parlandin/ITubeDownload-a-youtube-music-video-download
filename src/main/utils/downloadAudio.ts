@@ -11,7 +11,8 @@ const downloadAudio = (
   quality: string,
   duration: string,
   thumbnail: string,
-  title: string
+  title: string,
+  totalSize: string
 ): void => {
   const defaultPath = getSelectedFolder();
 
@@ -27,7 +28,11 @@ const downloadAudio = (
     thumbnail: thumbnail,
     duration: duration,
     progress: 0,
-    filePath: `${defaultPath}/${name}.mp3`
+    filePath: `${defaultPath}/${name}.mp3`,
+    format: "mp3",
+    quality: `${chooseFormat.audioBitrate}Kbps`,
+    totalSize: totalSize,
+    channel: videoInfo.videoDetails.author.name
   });
 
   queue.push(() => {

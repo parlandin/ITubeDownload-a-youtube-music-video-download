@@ -12,7 +12,8 @@ const downloadVideo = (
   duration: string,
   thumbnail: string,
   title: string,
-  audioQuality: string
+  audioQuality: string,
+  totalSize: string
 ): void => {
   const defaultPath = getSelectedFolder();
 
@@ -20,13 +21,19 @@ const downloadVideo = (
 
   const name = title.replace(/[^a-z0-9]/gi, "_").toLowerCase() + "_" + Date.now();
 
+  const chooseFormat = ytdl.chooseFormat(videoInfo.formats, { quality: qualityInt });
+
   event.sender.send("video-details", {
     id: name,
     title: title,
     thumbnail: thumbnail,
     duration: duration,
     progress: 0,
-    filePath: `${defaultPath}/${name}.mp4`
+    filePath: `${defaultPath}/${name}.mp4`,
+    format: "mp4",
+    quality: `${chooseFormat.qualityLabel}`,
+    totalSize: totalSize,
+    channel: videoInfo.videoDetails.author.name
   });
 
   queue.push(() => {

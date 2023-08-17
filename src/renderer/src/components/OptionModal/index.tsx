@@ -65,12 +65,17 @@ const OptionModal: React.FC<OptionModalProps> = ({ visible, close, data, isPendi
   const handleOnClickDownload = (): void => {
     if (!data) return;
 
+    const filtedFiles = currentListOfFiles.filter(
+      (item: IFormatInfo) => item.itag === parseInt(checkedValue)
+    );
+
     const dataAudio = {
       videoInfos: data.formats,
       quality: checkedValue,
       duration: data.duration,
       thumbnail: data.thumbnail,
-      title: data.title
+      title: data.title,
+      totalSize: filtedFiles[0].totalSizeMB
     };
 
     if (currentType === FileType.audio) {

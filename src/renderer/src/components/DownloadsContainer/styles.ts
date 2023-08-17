@@ -130,6 +130,25 @@ const FlipContainer = styled.div`
   }
 `;
 
+const ContentsInfos = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: inherit;
+  color: inherit;
+  font-weight: inherit;
+`;
+
+const Separator = styled.div`
+  width: 4px;
+  height: 4px;
+  background-color: #ff0000;
+  border-radius: 50%;
+
+  margin: 0 5px;
+`;
+
 export {
   Container,
   VideoContainer,
@@ -137,5 +156,7 @@ export {
   VideoDetails,
   VideoText,
   FilePath,
-  FlipContainer
+  FlipContainer,
+  ContentsInfos,
+  Separator
 };

@@ -12,7 +12,7 @@ const DownloadsContainer: React.FC = () => {
   };
 
   return (
-    <S.Container isContent={dataList.length > 0 || dataListComplete.length > 0}>
+    <S.Container isContent={dataList.length >= 0 || dataListComplete.length >= 0}>
       {dataList.map((item) => {
         const isCompleted = item.progress == 100;
 
@@ -26,7 +26,14 @@ const DownloadsContainer: React.FC = () => {
               <S.VideoText className="title" title={item.title}>
                 {item.title}
               </S.VideoText>
-              <S.VideoText className="text">duração: {item.duration} minutos</S.VideoText>
+
+              <S.VideoText className="text duration">
+                <S.ContentsInfos>
+                  {item.duration} <S.Separator /> {item.totalSize} <S.Separator /> {item.format}
+                  <S.Separator /> {item.quality} <S.Separator /> {item.channel}
+                </S.ContentsInfos>
+              </S.VideoText>
+
               <S.VideoText className="text download">
                 <span>download{isCompleted ? "" : ":"}</span>
                 {!isCompleted ? (
@@ -55,7 +62,10 @@ const DownloadsContainer: React.FC = () => {
               </S.VideoText>
 
               <S.VideoText className="text duration">
-                0{item.duration} • 5,10MB • mp4 • 1080p • Red Hot Chili Peppers
+                <S.ContentsInfos>
+                  {item.duration} <S.Separator /> {item.totalSize} <S.Separator /> {item.format}
+                  <S.Separator /> {item.quality} <S.Separator /> {item.channel}
+                </S.ContentsInfos>
               </S.VideoText>
 
               <S.FlipContainer>
