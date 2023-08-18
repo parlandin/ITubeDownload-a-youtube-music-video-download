@@ -1,7 +1,7 @@
 import * as S from "./styles";
 import ProgressBar from "@components/ProgressBar";
 import useDownloads from "@renderer/hooks/useDownloads";
-import VideoIcon from "@assets/video.png";
+import VideoIcon from "@assets/video.svg";
 import AudioIcon from "@assets/audio.svg";
 
 const DownloadsContainer: React.FC = () => {
