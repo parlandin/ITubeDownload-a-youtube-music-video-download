@@ -68,7 +68,16 @@ function convertStreamToMP3(
       "pipe:0" // Input from pipe
     ];
 
-    const outputOptions = ["-threads", "0", "-q:a", "4", "-vn", `${defaultPath}/${name}.mp3`];
+    const outputOptions = [
+      "-threads",
+      "0",
+      "-preset",
+      "fast",
+      "-b:a",
+      `${audioBitrate}k`,
+      "-vn",
+      `${defaultPath}/${name}.mp3`
+    ];
 
     const ffmpegProcess = spawn(ffmpegPath, [...inputOptions, ...outputOptions]);
 
