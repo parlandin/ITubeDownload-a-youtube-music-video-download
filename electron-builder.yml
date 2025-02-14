@@ -32,12 +32,13 @@ dmg:
 linux:
   target:
     - AppImage
-    - snap
-    - deb
+    #- snap
+    #- deb
   maintainer: electronjs.org
   category: Utility
 appImage:
   artifactName: ${name}-${version}.${ext}
+  desktop: build/${name}.desktop
 npmRebuild: false
 publish:
   provider: github
