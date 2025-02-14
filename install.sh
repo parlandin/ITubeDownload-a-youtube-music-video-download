@@ -1,5 +1,4 @@
 docker run --rm -ti \
-  --user $(id -u):$(id -g) \
   --env ELECTRON_CACHE="/root/.cache/electron" \
   --env ELECTRON_BUILDER_CACHE="/root/.cache/electron-builder" \
   --env npm_config_platform=win32 \
@@ -9,3 +8,6 @@ docker run --rm -ti \
   -v ~/.cache/electron-builder:/root/.cache/electron-builder \
   electronuserland/builder:wine \
   bash -c "cd /project && rm -rf node_modules && yarn cache clean && yarn install --check-files && yarn run build:win"
+
+
+sudo chown -R $USER:$USER .
