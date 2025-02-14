@@ -13,6 +13,7 @@ files:
 asarUnpack:
   - resources/**
 afterSign: build/notarize.js
+
 win:
   executableName: ITube-Download
 nsis:
@@ -43,7 +44,9 @@ npmRebuild: false
 publish:
   provider: github
   owner: Gu-Parlandim
-  repo: ITubeDownload-a-youtube-music-video-download
+  repo: https://github.com/parlandin/ITubeDownload-a-youtube-music-video-download
+  releaseType: draft
+
 protocols:
   name: ITube-Download
   schemes:
