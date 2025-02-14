@@ -1,4 +1,4 @@
-import ytdl, { videoInfo } from "ytdl-core";
+import ytdl, { videoInfo } from "@distube/ytdl-core";
 import { ffmpegPath } from "./ffmpeg";
 import queue from "./queue";
 import { getSelectedFolder } from "../settings";

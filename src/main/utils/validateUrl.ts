@@ -1,4 +1,4 @@
-import ytdl from "ytdl-core";
+import ytdl from "@distube/ytdl-core";
 
 export default (url: string): boolean => {
   return ytdl.validateURL(url);

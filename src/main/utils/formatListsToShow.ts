@@ -1,4 +1,4 @@
-import ytdl from "ytdl-core";
+import ytdl from "@distube/ytdl-core";
 import getListOfVideoInfos, { IFormatInfo } from "./getListOfVideoInfos";
 
 export interface IFormattedReturn {

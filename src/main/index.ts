@@ -10,7 +10,7 @@ import "./MainProcess/downloadYoutube";
 import "./MainProcess/selectedFolder";
 import "./MainProcess/windowAction";
 import "./MainProcess/getListToShow";
-import "/src/main/MainProcess/ConcurrencyDownloads";
+import "./MainProcess/concurrencyDownloads";
 
 let mainWindow: BrowserWindow | null = null;
 
