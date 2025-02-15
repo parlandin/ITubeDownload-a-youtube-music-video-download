@@ -1,4 +1,5 @@
 import ytdl from "@distube/ytdl-core";
+import { formatLink } from "./validateUrl";
 
 export interface IFormatInfo {
   quality: string;
@@ -131,7 +132,11 @@ function extractFormatInfo(
 }
 
 const getListOfVideoInfos = async (url: string): Promise<IListOfVideoInfos> => {
-  const infos = await ytdl.getInfo(url);
+  const formatUrl = formatLink(url);
+
+  console.log({ formatUrl });
+
+  const infos = await ytdl.getInfo(formatUrl);
 
   const formatAudio = ytdl.filterFormats(infos.formats, "audioonly");
   const formatVideo = ytdl.filterFormats(infos.formats, "videoonly");
