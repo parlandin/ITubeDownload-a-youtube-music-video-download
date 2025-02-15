@@ -134,8 +134,6 @@ function extractFormatInfo(
 const getListOfVideoInfos = async (url: string): Promise<IListOfVideoInfos> => {
   const formatUrl = formatLink(url);
 
-  console.log({ formatUrl });
-
   const infos = await ytdl.getInfo(formatUrl);
 
   const formatAudio = ytdl.filterFormats(infos.formats, "audioonly");
