@@ -1,35 +1,17 @@
-# ITube-Download 
-## a youtube music-video download
+# ITube-Download
+## A youtube music-video download
 
-An Electron application with React and TypeScript
+Com esse aplicativo electron você pode baixar videos e músicas diretamente do seu youtube
 
-## Recommended IDE Setup
+## Extensões
+- Chrome: https://github.com/parlandin/Itube-download-DeepLink
+- FireFox: https://github.com/parlandin/Itube-download-DeepLink-firefox
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+## Exemplo:
+- no youtube
+<img src="https://github.com/parlandin/Itube-download-DeepLink/assets/56051040/a89a73c6-a96d-4d2a-82ae-5588302620ff" alt="itube example youtube">
 
-## Project Setup
+- app
+<img src="https://github.com/parlandin/Itube-download-DeepLink/assets/56051040/28ad83ed-1da1-4ccb-a769-1094f82bf961" alt="itube example app">
 
-### Install
-
-```bash
-$ yarn
-```
-
-### Development
-
-```bash
-$ yarn dev
-```
-
-### Build
-
-```bash
-# For windows
-$ yarn build:win
-
-# For macOS
-$ yarn build:mac
-
-# For Linux
-$ yarn build:linux
-```
+- nomes e imagens meramente ilustrativas
